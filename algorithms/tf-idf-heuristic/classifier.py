@@ -34,32 +34,31 @@ class SimpleClassifier:
 
         # Attribution des catégories
 
-        from collections import defaultdict
 
         keywords = {
             "développement": 0,
             "web" : 0,
             "développeur" : 0,
             "front" : 0,
-            "backend" : 0
-            "web" : 0
-            "c++" : 0
+            "backend" : 0,
+            "web" : 0,
+            "c++" : 0,
             "machine" : 1,
             "learning" : 1,
             "data" : 1,
             "image" : 2,
             "discretisation" : 2,
             "points" : 2,
-            "objet" : 2
-            "grille" : 2
+            "objet" : 2,
+            "grille" : 2,
             "3D" : 2
         }
 
-        categories = {
+        categories = [
             "Developpement",
             "Machine Learning",
             "Traitement de l\'image"
-        }
+        ]
 
         keyword_df = pd.DataFrame(keywords.items(), columns=["word", "category"])
         categories_df = pd.DataFrame(categories, columns=["label"])
