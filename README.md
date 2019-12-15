@@ -1,5 +1,46 @@
 # Classifieur d'offres
 
+## Démarrage
+
+Dans le répertoire contenant `docker-compose.yml `(avec Hyperplan et PostgreSQL):
+
+```console
+$ sudo docker-compose up
+```
+
+Build de l'image (à faire au premier démarrage)
+
+```console
+$ cd algorithms/tf-idf-heuristic/
+$ docker build . -t simple_heuristic:latest
+```
+
+Création et lancement du conteneur (la première fois):
+
+```console
+$ docker run --network=hyperplan --name=simple_heuristic simple_heuristic:latest
+```
+
+Lancement du conteneur (après création):
+
+```console
+$ docker start -a simple_heuristic
+```
+
+Fermeture du conteneur:
+
+```console
+$ docker stop simple_heuristic
+```
+
+### Nettoyage (si nécessaire)
+
+```console
+$ docker ps -a
+$ docker rm simple_heuristic
+```
+
+
 ## Organisation du projet
 
 
