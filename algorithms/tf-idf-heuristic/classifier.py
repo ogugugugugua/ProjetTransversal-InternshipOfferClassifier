@@ -56,8 +56,8 @@ class SimpleClassifier:
 
         categories = [
             "Developpement",
-            "Machine Learning",
-            "Traitement de l\'image"
+            "MachineLearning",
+            "TraitementImage"
         ]
 
         keyword_df = pd.DataFrame(keywords.items(), columns=["word", "category"])
