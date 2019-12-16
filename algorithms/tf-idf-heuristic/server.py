@@ -8,7 +8,7 @@ classifier = SimpleClassifier()
 def predict():
   json_data = request.json
   text = json_data['text']
-  return jsonify(classifier.predict(text))
+  return classifier.predict(text)
 
 if __name__ == "__main__":
-  app.run(debug=True)
+  app.run(debug=True, host='0.0.0.0')

@@ -1,0 +1,20 @@
+[
+    {
+        "label": "Developpement",
+        "probability": 0.9933072,
+        "correctExampleUrl": "/examples?predictionId=39c981f6-cfaa-4147-bd56-13e9de458c27&label=Developpement&isCorrect=true",
+        "incorrectExampleUrl": "/examples?predictionId=39c981f6-cfaa-4147-bd56-13e9de458c27&label=Developpement&isIncorrect=true"
+    },
+    {
+        "label": "MachineLearning",
+        "probability": 0.006692851,
+        "correctExampleUrl": "/examples?predictionId=39c981f6-cfaa-4147-bd56-13e9de458c27&label=MachineLearning&isCorrect=true",
+        "incorrectExampleUrl": "/examples?predictionId=39c981f6-cfaa-4147-bd56-13e9de458c27&label=MachineLearning&isIncorrect=true"
+    },
+    {
+        "label": "TraitementImage",
+        "probability": 0.0,
+        "correctExampleUrl": "/examples?predictionId=39c981f6-cfaa-4147-bd56-13e9de458c27&label=TraitementImage&isCorrect=true",
+        "incorrectExampleUrl": "/examples?predictionId=39c981f6-cfaa-4147-bd56-13e9de458c27&label=TraitementImage&isIncorrect=true"
+    }
+]
