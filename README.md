@@ -1,4 +1,38 @@
-# Classifieur d'offres
+# Classification d'offres
+
++ Auteurs: Eric Bizet, Julien Garcia, Yulin Xie
+
+# Setup
+
+## Aperçu du projet Hyperplan
+
+```console
+hyperplan> describe project offerClassifier
++-----------------+-----------------+----------------+----------+-----------+------------+----------------------+
+|        id       |       name      |      type      | features |   labels  | algorithms |        topic         |
++-----------------+-----------------+----------------+----------+-----------+------------+----------------------+
+| offerClassifier | offerClassifier | classification |   text   | category2 |     2      | Offer classification |
++-----------------+-----------------+----------------+----------+-----------+------------+----------------------+
++-----------------+--------+
+|        id       | weight |
++-----------------+--------+
+|      random     |  0.0   |
+| simpleHeuristic |  1.0   |
++-----------------+--------+
+hyperplan> list labels
++-----------+-------+----------------------+----------------------------------------------------------+
+|     Id    |  Type |     Description      |                          oneOf                           |
++-----------+-------+----------------------+----------------------------------------------------------+
+|  category | oneOf | Categorie de l'offre | Developpement,  Machine Learning,  Traitement de l'image |
+| category2 | oneOf |      categorie       |     Developpement, MachineLearning, TraitementImage      |
++-----------+-------+----------------------+----------------------------------------------------------+
+hyperplan> list features
++------+---------------+
+|  id  | feature names |
++------+---------------+
+| text |      text     |
++------+---------------+
+```
 
 ## Démarrage
 
@@ -15,7 +49,7 @@ $ cd algorithms/tf-idf-heuristic/
 $ docker build . -t simple_heuristic:latest
 ```
 
-Création et lancement du conteneur (la première fois):
+Création et lancement du conteneur pour l'heuristique(la première fois):
 
 ```console
 $ docker run --network=hyperplan --name=simple_heuristic simple_heuristic:latest
@@ -41,10 +75,13 @@ $ docker rm simple_heuristic
 ```
 
 
-## Organisation du projet
+# Organisation du projet
 
+## Backend
 
-## Test du backend
+Les algorithmes délivrant les prédictions sont contenus dans le dossier `algorithms/` qui contient le code des images Docker à déployer. Pour le moment il n'existe qu'un seul algorithme: `tf-idf-heuristic/`
+
+### Test du backend
 
 ```console
 $ python server.py
@@ -53,28 +90,36 @@ $ curl -X POST http://127.0.0.1:5000 -H 'Content-Type: application/json' -d '{ "
 
     "[{\"label\":\"Developpement\",\"probability\":0.5},{\"label\":\"Machine Learning\",\"probability\":0.5},{\"label\":\"Traitement de l'image\",\"probability\":0.0}]"
 
-# Notes par rapport à Hyperplan
+## Application
+
+Le dossier `app/` contient le script principal permettant la commande de predictions. Celui ci peut être exécuté en dehors du cluster Docker. Les requêtes entrent dans le réseau d'Hyperplan via le port 8080 de l'hôte.
+
+
+# Exploitation d'Hyperplan
 
 ## Etude des fonctionnalités
 
-+ Ou vérifier l'intégrité des données transférées ?
-+ Redondance serveur Flask
+Lors du transit des données textuelles, il n'y a pas de vérification d'intégrité des données, du moins pour un backend de type application Flask. Les seules garanties sont fournies par la bonne formation du `json` (cela lève une exception dans le serveur Hyperplan) et la concordance des noms des variables entre le projet Hyperplan, l'application "frontend", et les algorithmes en backend.
+
+Le déploiement systématique de Flask peut constituer une redondance. Dans clipper nous avons pu noter que la partie admin (l'équivalent d'*hyperplan-server*) était capable de démarrer des conteneurs en backend et d'encapsuler les algorithmes automatiquement.
+
+Même si cela n'est pas géré automatiquement, l'utilisation de Docker constitue un gain de temps réel pour effectuer les tests. L'environnement python est sous contrôle et la connexion réseau est automatique une fois paramétrée. Une commande suffit à ordonner le branchement de notre algorithme.
+
+Pour commander des prédictions, l'appel depuis le frontend est toujours le même. Cela permet de ne plus s'en soucier une fois que le mécanisme est mis en place.
 
 ## Bugs rencontrés
 
-+ Erreur au lancement de commandes non documentées sans argument
-+ Erreur de demarrage liée à Java ?
-+ Comment supprimer une feature ?
++ Erreur au lancement de commandes non documentées sans argument (ex: `delete`)
++ Impossible de supprimer une feature depuis le CLI.
++ On ne peut pas utiliser des underscores (peut être est-ce voulu):
 
 ```console
 ProjectIdIsNotAlphaNumerical : Project id offer_classifier is not alphanumerical
 Ready to start predicting ! 
 ```
 
-+ Peut pas utiliser des underscores
-+ Eviter les espaces dans les labels retournés en JSON!
-+ udpate project => 1. choose default algorithm error
-
++ Un classique mais éviter les espaces dans les labels retournés en JSON!
++ Dans le CLI: `udpate project` => `1. choose default algorithm` retourne une erreur et quitte le CLI:
 
 
 ```console
@@ -109,5 +154,17 @@ Traceback (most recent call last):
 AttributeError: 'dict' object has no attribute 'warn'
 ```
 
-+ Echec d'authentification a logger (http 401)
-+ Bien utiliser l'attribut json de requests.post pour éviter les problèmes de JSON malformés
++ Echec d'authentification non loggé dans le serveur: "*Accepted connection*" alors que le code réponse HTTP est 401.
+
+### Autres difficultés rencontrées
+
++ En Python: bien utiliser l'attribut `json` de requests.post pour éviter les problèmes de JSON malformés (à cause des caractères unicode à échapper correctement).
++ Comportement étrange de IPython avec UTF-8.
+
+## A considerer pour le futur
+
+Ici l'application ne traite qu'un seul fichier et stocke ses résultats dans un fichier `json`. Il faudra pouvoir prendre en charge le stockage de multiples fichiers et gérer stocker leur catégorie d'une certaine façon. On ne teste pas les capacités d'Hyperplan à délivrer des prédictions en masse.
+
+Nous ne nous sommes pas penchés sur les fonctionnalités de branchement avec des application de type TensorFlow serving mais on peut imaginer que le comportement entre l'application et le serveur Hyperplan reste le même.
+
+Dans les jours à venir nous essaierons de mettre en place les nouvelles fonctionnalités proposées par *hyperplan-backend* (que nous n'avons pas encore pu tester). Des points soulignés ici ne sont peut-être plus pertinents depuis la sortie du logiciel.
