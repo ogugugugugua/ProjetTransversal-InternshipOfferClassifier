@@ -161,10 +161,10 @@ AttributeError: 'dict' object has no attribute 'warn'
 + En Python: bien utiliser l'attribut `json` de requests.post pour éviter les problèmes de JSON malformés (à cause des caractères unicode à échapper correctement).
 + Comportement étrange de IPython avec UTF-8.
 
-## A considerer pour le futur
+## A considérer pour le futur
 
-Ici l'application ne traite qu'un seul fichier et stocke ses résultats dans un fichier `json`. Il faudra pouvoir prendre en charge le stockage de multiples fichiers et gérer stocker leur catégorie d'une certaine façon. On ne teste pas les capacités d'Hyperplan à délivrer des prédictions en masse.
+Ici l'application ne traite qu'un seul fichier et stocke ses résultats dans un fichier `json`. Il faudra pouvoir prendre en charge le stockage de multiples fichiers et stocker leur catégorie d'une certaine façon. On ne teste pas les capacités d'Hyperplan à délivrer des prédictions en masse.
 
-Nous ne nous sommes pas penchés sur les fonctionnalités de branchement avec des application de type TensorFlow serving mais on peut imaginer que le comportement entre l'application et le serveur Hyperplan reste le même.
+Nous ne nous sommes pas penchés sur les fonctionnalités de branchement avec des applications de type TensorFlow serving mais on peut imaginer que le comportement entre l'application et le serveur Hyperplan reste le même.
 
 Dans les jours à venir nous essaierons de mettre en place les nouvelles fonctionnalités proposées par *hyperplan-backend* (que nous n'avons pas encore pu tester). Des points soulignés ici ne sont peut-être plus pertinents depuis la sortie du logiciel.
