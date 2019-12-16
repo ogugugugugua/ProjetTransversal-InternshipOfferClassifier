@@ -109,3 +109,5 @@ Traceback (most recent call last):
 AttributeError: 'dict' object has no attribute 'warn'
 ```
 
++ Echec d'authentification a logger (http 401)
++ Bien utiliser l'attribut json de requests.post pour éviter les problèmes de JSON malformés
