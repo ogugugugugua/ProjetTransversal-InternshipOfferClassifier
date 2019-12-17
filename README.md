@@ -1,6 +1,13 @@
 # Classification d'offres
 
 + Auteurs: Eric Bizet, Julien Garcia, Yulin Xie
++ Description: Projet de test des fonctionnalités d'[Hyperplan](https://hyperplan.io/index.html). 
+
+
+### Expérimentations annexes
+
++ https://github.com/jugrc/Hyperplan/tree/develop
++ https://github.com/ogugugugugua/Hyperplan
 
 # Setup
 
