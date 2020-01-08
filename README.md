@@ -68,7 +68,13 @@ Lancement du conteneur (après création):
 $ docker start -a simple_heuristic
 ```
 
-Fermeture du conteneur:
+Lancement de l'application
+
+```console
+$ python3 main.py
+```
+
+Fermeture du conteneur (après utilisation):
 
 ```console
 $ docker stop simple_heuristic

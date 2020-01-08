@@ -31,8 +31,3 @@ class FeedHyperplan:
 
         with open(self.result_file, "w+") as file:
             json.dump(labels, file, indent=4)
-
-        
-
-fh = FeedHyperplan()
-fh.classify("datasets/Stage EasyBroadcast 2019.pdf.txt")

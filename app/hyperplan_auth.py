@@ -22,7 +22,7 @@ class Auth:
             )
             if response.status_code == 200:
                 self.token = response.json()['token']
-                print(self.token)
+                # print(self.token)
             elif response.status_code == 401:
                 print('Authentication failed')
 

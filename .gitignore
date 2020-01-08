@@ -1,1 +1,4 @@
 app/datasets/stages
+*.pyc
+*checkpoint.ipynb
+.vscode/
