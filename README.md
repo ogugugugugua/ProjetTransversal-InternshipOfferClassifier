@@ -43,9 +43,20 @@ hyperplan> list features
 
 ## Démarrage
 
-Dans le répertoire contenant `docker-compose.yml `(avec Hyperplan et PostgreSQL):
+### Prérequis
+
+L'application utilise le module `persistqueue` (https://github.com/peter-wangxu/persist-queue) pour la gestion d'une FIFO persistente.
 
 ```console
+$ pip install persist-queue
+```
+
+### Utilisation
+
+Démarrage du serveur Hyperplan avec `docker-compose.yml`:
+
+```console
+$ cd hyperplan/
 $ sudo docker-compose up
 ```
 
@@ -71,6 +82,7 @@ $ docker start -a simple_heuristic
 Lancement de l'application
 
 ```console
+$ cd app/
 $ python3 main.py
 ```
 

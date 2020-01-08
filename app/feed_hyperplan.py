@@ -8,17 +8,17 @@ class FeedHyperplan:
         self.auth = Auth()
         self.auth.authenticate()
         self.result_file = "result.json"
+        self.string_to_feed = ""
 
-    def classify(self, file_path):
+    def extract_string_from_file(self, file_path):
         with open(file_path) as file:
-            file_content = file.read()
+            return file.read()
 
-        file_content
-        
+    def classify(self, string_to_feed):        
         url = 'http://localhost:8080/predictions'
         body =  {"projectId" :  "offerClassifier", 
                                 "features" : {
-                                    "text" : file_content
+                                    "text" : string_to_feed 
                                 }
                 }
 
