@@ -6,5 +6,5 @@ class Consumer:
         self.q = persistqueue.SQLiteQueue('queue', auto_commit=True)
     def consume(self):
         while True:
-            text = self.q.get()
-            print(text)
+            offer_data = self.q.get()
+            print(self.feeder.classify(offer_data["clean_text"]))

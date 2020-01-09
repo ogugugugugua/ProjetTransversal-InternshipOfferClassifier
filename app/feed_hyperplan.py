@@ -29,5 +29,17 @@ class FeedHyperplan:
         json_response = r.json()
         labels = json_response['labels']
 
-        with open(self.result_file, "w+") as file:
-            json.dump(labels, file, indent=4)
+        # Catégorie avec la plus haute catégorie
+
+        highest_probability = 0
+        bestfit_category = ""
+
+        for labels_result in labels:
+            # print(labels_result)
+            if labels_result['probability'] > highest_probability:
+                bestfit_category = labels_result['label']
+
+        return bestfit_category
+
+        # with open(self.result_file, "w+") as file:
+        #     json.dump(labels, file, indent=4)
