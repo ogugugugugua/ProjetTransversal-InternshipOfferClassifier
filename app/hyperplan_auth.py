@@ -9,7 +9,6 @@ class Auth:
         self.login = "admin"
         self.password = "admin"
         self.token = None
-    
 
     def authenticate(self):
         try:
