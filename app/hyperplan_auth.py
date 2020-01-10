@@ -9,7 +9,6 @@ class Auth:
         self.login = "admin"
         self.password = "admin"
         self.token = None
-    
 
     def authenticate(self):
         try:
@@ -22,7 +21,9 @@ class Auth:
             )
             if response.status_code == 200:
                 self.token = response.json()['token']
-                print(self.token)
+                # print(self.token)
+                return response
+
             elif response.status_code == 401:
                 print('Authentication failed')
 
@@ -30,5 +31,3 @@ class Auth:
             pass
         except Exception as err:
             print(err)
-
-        return response

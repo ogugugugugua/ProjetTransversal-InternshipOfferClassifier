@@ -8,17 +8,17 @@ class FeedHyperplan:
         self.auth = Auth()
         self.auth.authenticate()
         self.result_file = "result.json"
+        self.string_to_feed = ""
 
-    def classify(self, file_path):
+    def extract_string_from_file(self, file_path):
         with open(file_path) as file:
-            file_content = file.read()
+            return file.read()
 
-        file_content
-        
+    def classify(self, string_to_feed):        
         url = 'http://localhost:8080/predictions'
         body =  {"projectId" :  "offerClassifier", 
                                 "features" : {
-                                    "text" : file_content
+                                    "text" : string_to_feed 
                                 }
                 }
 
@@ -29,10 +29,17 @@ class FeedHyperplan:
         json_response = r.json()
         labels = json_response['labels']
 
-        with open(self.result_file, "w+") as file:
-            json.dump(labels, file, indent=4)
+        # Catégorie avec la plus haute catégorie
 
-        
+        highest_probability = 0
+        bestfit_category = ""
 
-fh = FeedHyperplan()
-fh.classify("datasets/Stage EasyBroadcast 2019.pdf.txt")
+        for labels_result in labels:
+            # print(labels_result)
+            if labels_result['probability'] > highest_probability:
+                bestfit_category = labels_result['label']
+
+        return bestfit_category
+
+        # with open(self.result_file, "w+") as file:
+        #     json.dump(labels, file, indent=4)
