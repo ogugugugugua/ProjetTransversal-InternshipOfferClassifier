@@ -7,12 +7,8 @@ import re
 
 
 class SimpleClassifier:
-    def preprocess(self, text):
-        return text.lower()
 
     def predict(self, text):
-
-        text = self.preprocess(text)
         words=re.findall("[\w']+", text)
 
         # count times of appearance of each word
@@ -41,7 +37,6 @@ class SimpleClassifier:
             "développeur" : 0,
             "front" : 0,
             "backend" : 0,
-            "web" : 0,
             "c++" : 0,
             "machine" : 1,
             "learning" : 1,
