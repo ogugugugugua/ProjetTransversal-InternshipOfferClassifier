@@ -4,7 +4,7 @@ import collections
 import re
 from utils import abs_path
 
-def predict(self, text="machine"):
+def predict(text) -> dict:
     words=re.findall("[\w']+", text)
 
     # count times of appearance of each word
@@ -67,6 +67,8 @@ def predict(self, text="machine"):
     else:
         categories_df['probability'] = 1 / categories_df.shape[0]
 
-    result = categories_df
+    result_probability = categories_df[['label', 'probability']]
+    result_probability = result_probability.fillna(0)
+    labels_dict = result_probability.to_dict()
     
-    return result
+    return labels_dict
