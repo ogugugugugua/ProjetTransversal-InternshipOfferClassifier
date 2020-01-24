@@ -9,6 +9,7 @@ class StoreResult(SQLiteConnector):
             try:
                 query = '''CREATE TABLE IF NOT EXISTS offer_classification (
                             id	INTEGER PRIMARY KEY AUTOINCREMENT,
+                            date	TEXT,
                             labels	TEXT,
                             category	TEXT
                         )'''
@@ -17,10 +18,10 @@ class StoreResult(SQLiteConnector):
             except Exception as error:
                 print(error)
 
-    def write_result(self, offer_id: int, labels: str, category: str):
+    def write_result(self, offer_id: int, date: str, labels: str, category: str):
         if self.sqliteConnection and self.cursor:
             try:
-                query = "INSERT OR IGNORE INTO offer_classification(id, labels, category) VALUES (%d, '%s', '%s') ON CONFLICT(id) DO UPDATE SET category=excluded.category;" % (offer_id, labels, category)
+                query = "INSERT OR REPLACE INTO offer_classification(id, date, labels, category) VALUES (%d, '%s', '%s' ,'%s')" % (offer_id, date, labels, category)
                 self.cursor.execute(query)
                 self.sqliteConnection.commit()
                 print("Offre classifie sauvegarde.")
@@ -31,5 +32,5 @@ class StoreResult(SQLiteConnector):
     def __call__(self, text: list, labels: dict, metadata: dict):
         category = labels['label'][max(labels['probability'], key=labels['probability'].get)]
         labels_json = json.dumps(labels)
-        self.write_result(metadata["id"], labels_json, category)
+        self.write_result(metadata["id"], metadata['date'], labels_json, category)
             
