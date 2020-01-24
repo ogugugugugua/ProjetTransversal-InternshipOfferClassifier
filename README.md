@@ -4,107 +4,64 @@
 + Description: Projet de test des fonctionnalités d'[Hyperplan](https://hyperplan.io/index.html). 
 
 
-### Expérimentations annexes
+## Expérimentations annexes
 
 + https://github.com/jugrc/Hyperplan/tree/develop
 + https://github.com/ogugugugugua/Hyperplan
 
-# Setup
 
-## Aperçu du projet Hyperplan
+# Démarrage
 
-```console
-hyperplan> describe project offerClassifier
-+-----------------+-----------------+----------------+----------+-----------+------------+----------------------+
-|        id       |       name      |      type      | features |   labels  | algorithms |        topic         |
-+-----------------+-----------------+----------------+----------+-----------+------------+----------------------+
-| offerClassifier | offerClassifier | classification |   text   | category2 |     2      | Offer classification |
-+-----------------+-----------------+----------------+----------+-----------+------------+----------------------+
-+-----------------+--------+
-|        id       | weight |
-+-----------------+--------+
-|      random     |  0.0   |
-| simpleHeuristic |  1.0   |
-+-----------------+--------+
-hyperplan> list labels
-+-----------+-------+----------------------+----------------------------------------------------------+
-|     Id    |  Type |     Description      |                          oneOf                           |
-+-----------+-------+----------------------+----------------------------------------------------------+
-|  category | oneOf | Categorie de l'offre | Developpement,  Machine Learning,  Traitement de l'image |
-| category2 | oneOf |      categorie       |     Developpement, MachineLearning, TraitementImage      |
-+-----------+-------+----------------------+----------------------------------------------------------+
-hyperplan> list features
-+------+---------------+
-|  id  | feature names |
-+------+---------------+
-| text |      text     |
-+------+---------------+
-```
+## Prérequis
 
-## Démarrage
-
-Dans le répertoire contenant `docker-compose.yml `(avec Hyperplan et PostgreSQL):
+L'application utilise le module `persistqueue` (https://github.com/peter-wangxu/persist-queue) pour la gestion d'une FIFO persistente.
 
 ```console
-$ sudo docker-compose up
+$ pip install persist-queue
 ```
 
-Build de l'image (à faire au premier démarrage)
+## Utilisation
+
+Lancement de l'application :
 
 ```console
-$ cd algorithms/tf-idf-heuristic/
-$ docker build . -t simple_heuristic:latest
+$ python3 main.py
 ```
 
-Création et lancement du conteneur pour l'heuristique(la première fois):
+Lancement du producteur de test (après utilisation):
 
 ```console
-$ docker run --network=hyperplan --name=simple_heuristic simple_heuristic:latest
+$ python3 producers/producer_test.py
 ```
-
-Lancement du conteneur (après création):
-
-```console
-$ docker start -a simple_heuristic
-```
-
-Fermeture du conteneur:
-
-```console
-$ docker stop simple_heuristic
-```
-
-### Nettoyage (si nécessaire)
-
-```console
-$ docker ps -a
-$ docker rm simple_heuristic
-```
-
 
 # Organisation du projet
 
 ## Backend
 
-Les algorithmes délivrant les prédictions sont contenus dans le dossier `algorithms/` qui contient le code des images Docker à déployer. Pour le moment il n'existe qu'un seul algorithme: `tf-idf-heuristic/`
-
-### Test du backend
-
-```console
-$ python server.py
-$ curl -X POST http://127.0.0.1:5000 -H 'Content-Type: application/json' -d '{ "text": "développeur machine" }'
-```
-
-    "[{\"label\":\"Developpement\",\"probability\":0.5},{\"label\":\"Machine Learning\",\"probability\":0.5},{\"label\":\"Traitement de l'image\",\"probability\":0.0}]"
+Les algorithmes délivrant les prédictions sont contenus dans le dossier `app/algorithms/` qui contient le code des images Docker à déployer. Pour le moment il n'existe qu'un seul algorithme: `tf-idf-heuristic/`
 
 ## Application
 
-Le dossier `app/` contient le script principal permettant la commande de predictions. Celui ci peut être exécuté en dehors du cluster Docker. Les requêtes entrent dans le réseau d'Hyperplan via le port 8080 de l'hôte.
+Le dossier `app/` contient le script principal permettant la commande de predictions.
 
 
-# Exploitation d'Hyperplan
+# Rapport d'utilisation d'Hyperplan
 
-## Etude des fonctionnalités
+## v2.0
+
+Cette itération intègre Hyperplan sous la forme d'un module python (implémenté en tant que *hyperplan-backend* http://backend.hyperplan.io/)
+
+Par rapport à l'implémentation précédente:
+
++ L'intégration devient plus simple, avec moins d'étapes.
++ Plus besoin de gérer la formation des requêtes HTTP et l'authentification à un serveur
++ Il est plus facile de controler le transit des données, avec un support du Linter (du moins partiel sur VS Code)
++ Démarrage du service instantané
++ Présence d'un dictionnaire de metadata (pour stocker un id par ex), qui évite des montages de code peu conventionnels.
+
+## v1.0
+
+### Etude des fonctionnalités
 
 Lors du transit des données textuelles, il n'y a pas de vérification d'intégrité des données, du moins pour un backend de type application Flask. Les seules garanties sont fournies par la bonne formation du `json` (cela lève une exception dans le serveur Hyperplan) et la concordance des noms des variables entre le projet Hyperplan, l'application "frontend", et les algorithmes en backend.
 
@@ -114,7 +71,7 @@ Même si cela n'est pas géré automatiquement, l'utilisation de Docker constitu
 
 Pour commander des prédictions, l'appel depuis le frontend est toujours le même. Cela permet de ne plus s'en soucier une fois que le mécanisme est mis en place.
 
-## Bugs rencontrés
+### Bugs rencontrés
 
 + Erreur au lancement de commandes non documentées sans argument (ex: `delete`)
 + Impossible de supprimer une feature depuis le CLI.
@@ -168,7 +125,7 @@ AttributeError: 'dict' object has no attribute 'warn'
 + En Python: bien utiliser l'attribut `json` de requests.post pour éviter les problèmes de JSON malformés (à cause des caractères unicode à échapper correctement).
 + Comportement étrange de IPython avec UTF-8.
 
-## A considérer pour le futur
+### A considérer pour le futur
 
 Ici l'application ne traite qu'un seul fichier et stocke ses résultats dans un fichier `json`. Il faudra pouvoir prendre en charge le stockage de multiples fichiers et stocker leur catégorie d'une certaine façon. On ne teste pas les capacités d'Hyperplan à délivrer des prédictions en masse.
 
