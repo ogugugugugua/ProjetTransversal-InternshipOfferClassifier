@@ -1,4 +1,0 @@
-CREATE TABLE IF NOT EXISTS "offer_classification" (
-	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-	"category"	TEXT
-)
