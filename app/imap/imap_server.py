@@ -1,5 +1,7 @@
 from imaplib import IMAP4_SSL as IMAP
 from socket import gaierror
+from imap_db import StoreMails
+from utils import abs_path
 import email
 
 
@@ -50,9 +52,10 @@ class HyperplanMailServer:
                     'b', '').replace('\'', ''), sender, subject))
                 # Affiche le corps du mail en bytes
                 # print(data[0][1])
-                
+
     def storeMails(self, imap):
-        
+        writer = StoreMails(abs_path("databases/mail_offer.db"))
+        print('\DataBase created\n')
 
     def imapDisconnection(self, imap):
         # Déconnexion au serveur IMAP
@@ -66,4 +69,5 @@ if __name__ == "__main__":
     hyperplan = HyperplanMailServer()
     imap = hyperplan.imapConnection()
     hyperplan.readMails(imap)
+    hyperplan.storeMails(imap)
     hyperplan.imapDisconnection(imap)
