@@ -54,8 +54,7 @@ class HyperplanMailServer:
                 # print(data[0][1])
 
     def storeMails(self, imap):
-        writer = StoreMails(abs_path("databases/mail_offer.db"))
-        print('\DataBase created\n')
+        writer = StoreMails(abs_path("../databases/mail_offers.db"))
 
     def imapDisconnection(self, imap):
         # Déconnexion au serveur IMAP

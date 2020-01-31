@@ -8,11 +8,11 @@ class StoreMails(SQLiteConnector):
         if self.sqliteConnection and self.cursor:
             try:
                 query = '''CREATE TABLE IF NOT EXISTS mail_offer (
-                            id	INTEGER PRIMARY KEY AUTOINCREMENT,
+                            id	INTEGER PRIMARY KEY,
                             sender	TEXT,
                             subject	TEXT,
                             date	TEXT,
-                            body    BLOB,
+                            body    TEXT,
                             attachment BLOB
                         )'''
                 self.cursor.execute(query)
