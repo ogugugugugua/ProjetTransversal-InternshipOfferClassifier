@@ -18,3 +18,6 @@ L'erreur était due au fait que l'utilisateur est *hyperplan* et non *hyperplan.
 - informations-universite@univ-nantes.fr
 - ne-pas-repondre@univ-nantes.fr
 - president@univ-nantes.fr
+- representation@interassonantes.org
+- bougetoncampus.interassonantes@gmail.com
+- voixindependante@gmail.com
