@@ -1,11 +1,9 @@
 from mlbackend.project import Project
 from algorithms.tf_idf_heuristic.classifier import predict as simple_heuristic
+from algorithms.multinomial_nb_sklearn.classifier import predict as mnb_clf
 from store_result import StoreResult
 from utils import abs_path
 from datetime import datetime
-
-def pre(text):
-    return text
 
 class FeedHyperplan:
 
@@ -13,7 +11,7 @@ class FeedHyperplan:
         self.project = Project(
             "offer_classifier",
             prediction_functions=[
-                simple_heuristic
+                mnb_clf
             ]
         )
 
