@@ -26,6 +26,7 @@ class HyperplanMailServer:
             imap.login(self.imap_user, self.imap_pass)
             print('Log in !\n')
             imap.select('INBOX')
+            self.deleteMails(imap)
             
             return imap
         except gaierror:
@@ -33,6 +34,14 @@ class HyperplanMailServer:
         except IMAP.error as e:
             print('Log in failed.\n')
             print(str(e) + '\n')
+            
+    def isSenderInStopMail(self, sender):
+        # Vérifie si l'émetteur est dans la liste stopMail 
+        for adress in self.stopMail:
+            if (adress in sender):
+                return True
+                
+        return False
 
     def readMails(self, imap):
         mailList = self.getMails(imap)
@@ -42,18 +51,34 @@ class HyperplanMailServer:
             print('%s :\nID[%s] de %s : %s\n\n%s\n' % (mail[3], mail[0], mail[1], mail[2], mail[4]))
 
         print('------------------------------- END Reading mails-------------------------------')
+
+    def deleteMails(self, imap):
+        typ, data = imap.search(None, 'ALL')
+        
+        for num in data[0].split():
+            typ, data = imap.fetch(num, '(RFC822)')
+            msg = email.message_from_bytes(data[0][1])
+            
+            mail_id = int(num.decode('utf8'))
+            sender = msg['From']
+
+            if (self.isSenderInStopMail(sender)):
+                imap.store(num, '+FLAGS', r'(\deleted)')
+                print('Mail %d deleted' % mail_id)
+                
+        imap.expunge()
         
     def getMails(self, imap):
         print('Searching mails...\n')
         mailList = []
 
-        tmp, data = imap.search(None, 'ALL')
+        typ, data = imap.search(None, 'ALL')
         
         for num in data[0].split():
-            isSenderInStopMail = True
+
             attachment = ''
             
-            tmp, data = imap.fetch(num, '(RFC822)')
+            typ, data = imap.fetch(num, '(RFC822)')
             msg = email.message_from_bytes(data[0][1])
             
             # Récupération des pièces jointes
@@ -75,23 +100,16 @@ class HyperplanMailServer:
             subject = email.header.make_header(email.header.decode_header(msg['Subject']))
             date = email.header.make_header(email.header.decode_header(msg['Date']))
 
-            # Vérifie si l'émetteur est dans la liste stopMail 
-            if (sender not in self.stopMail):
-                for adress in self.stopMail:
-                    if (adress not in sender):
-                        isSenderInStopMail = False
-                    else:
-                        isSenderInStopMail = True
-                        break
-
             # Si l'émetteur n'est pas dans la stopMail, on ajoute le mail dans la mailList
-            if (not isSenderInStopMail):               
+            if (not self.isSenderInStopMail(sender)):               
                 params = [mail_id, sender, subject, date, body, attachment[:-1]]
                 mailList.append(params)
 
         return mailList
 
     def storeMails(self, imap):
+        self.clearDB()
+        
         writer = StoreMails(abs_path('../databases/mail_offers.db'))
         mailList = self.getMails(imap)
 
@@ -106,24 +124,29 @@ class HyperplanMailServer:
         
         for mail in reader.fetch_mails():
             for element in mail:
-                if(mail.index(element) == 5):
+                if (mail.index(element) == 0):
+                    print('ID : %d' % element)
+                """if(mail.index(element) == 5):
                     attachments = element.split(',')
 
                     for i in range(0, len(attachments), 2):
                         print('Nom de la pièce jointe : %s\n' % attachments[i])
-                        #open('./files/' + attachments[i], 'wb').write(base64.b64decode(attachments[i + 1]))
+                        open('./files/' + attachments[i], 'wb').write(base64.b64decode(attachments[i + 1]))"""
 
+    def clearDB(self):
+        StoreMails(abs_path('../databases/mail_offers.db')).clear_DB()
+        
     def imapDisconnection(self, imap):
         # Déconnexion du serveur IMAP
         imap.close()
-        print('Connection closed.\n')
+        print('\nConnection closed.\n')
         imap.logout()
         print('Log out.\n')
 
 if __name__ == "__main__":
     hyperplan = HyperplanMailServer()
     imap = hyperplan.imapConnection()
-    #hyperplan.readMails(imap)
+    hyperplan.readMails(imap)
     hyperplan.storeMails(imap)
     hyperplan.fetchMails()
     hyperplan.imapDisconnection(imap)

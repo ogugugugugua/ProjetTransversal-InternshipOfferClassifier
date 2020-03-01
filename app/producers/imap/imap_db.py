@@ -5,6 +5,7 @@ from sqlite_connector import SQLiteConnector
 from utils import abs_path
 
 class StoreMails(SQLiteConnector):
+    
     def __init__(self, db_path):
         super(StoreMails, self).__init__(db_path)
         if self.sqliteConnection and self.cursor:
@@ -31,7 +32,7 @@ class StoreMails(SQLiteConnector):
                 print("Saved email %s." % mail_id)
             except Exception as error:
                 print(error)
-                
+                                          
     def fetch_mails(self):
         if self.sqliteConnection and self.cursor:
             try:
@@ -41,5 +42,15 @@ class StoreMails(SQLiteConnector):
                 print("Fetched emails.\n")
                 
                 return self.cursor
+            except Exception as error:
+                print(error)
+
+    def clear_DB(self):
+        if self.sqliteConnection and self.cursor:
+            try:
+                query = "DELETE FROM mail_offer"
+                self.cursor.execute(query)
+                self.sqliteConnection.commit()
+                print("Cleared Database.\n")
             except Exception as error:
                 print(error)
