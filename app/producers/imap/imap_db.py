@@ -11,7 +11,7 @@ class StoreMails(SQLiteConnector):
         if self.sqliteConnection and self.cursor:
             try:
                 query = '''CREATE TABLE IF NOT EXISTS mail_offer (
-                            id	INTEGER PRIMARY KEY,
+                            id	TEXT PRIMARY KEY,
                             sender	TEXT,
                             subject	TEXT,
                             date	TEXT,
@@ -23,10 +23,10 @@ class StoreMails(SQLiteConnector):
             except Exception as error:
                 print(error)
     
-    def write_result(self, mail_id: int, sender: str, subject: str, date: str, body: str, attachment: str):
+    def write_result(self, mail_id: str, sender: str, subject: str, date: str, body: str, attachment: str):
         if self.sqliteConnection and self.cursor:
             try:
-                query = "INSERT OR REPLACE INTO mail_offer(id, sender, subject, date, body, attachment) VALUES (%d, '%s', '%s', '%s', '%s', '%s')" % (mail_id, sender, subject, date, body, attachment)
+                query = "INSERT OR REPLACE INTO mail_offer(id, sender, subject, date, body, attachment) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')" % (mail_id, sender, subject, date, body, attachment)
                 self.cursor.execute(query)
                 self.sqliteConnection.commit()
                 print("Saved email %s." % mail_id)
