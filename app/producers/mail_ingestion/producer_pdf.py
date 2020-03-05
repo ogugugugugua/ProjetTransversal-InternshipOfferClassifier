@@ -2,11 +2,14 @@ from imap_server import HyperplanImapServer
 from PyPDF2 import PdfFileReader
 import time
 import base64
+import persistqueue
+import os
 
 class Producer:
     
     def __init__(self):
         self.list_classified_mails = []
+        self.q = persistqueue.SQLiteQueue(os.path.join(os.path.dirname(__file__), "../../queue"), auto_commit=True)
         self.imapServerConnection()
         
     def imapServerConnection(self):
@@ -24,19 +27,23 @@ class Producer:
                     self.pdfToText(informations)
                     print('Searching mails...\n')
                     
-                time.sleep(10)
+                time.sleep(5)
         except KeyboardInterrupt: # Ctrl + c
             pass            
             
         hyperplan.imapDisconnection(imap)
         
+    def feedFIFO(self, id, text):
+        self.q.put({"id": id, "clean_text": text})
+
     def pdfToText(self, informations):
         for mail in informations:
             if (mail[0] not in self.list_classified_mails):
                 for info in mail:
                     if (mail.index(info) == 0):
-                        print('Mail ID : %s\n' % info)
-                        self.list_classified_mails.append(mail[0])
+                        mail_id = info
+                        print('Mail ID : %s\n' % mail_id)
+                        self.list_classified_mails.append(mail_id)
                         
                     if (mail.index(info) == 5):
                         attachments = info.split(',')
@@ -48,7 +55,7 @@ class Producer:
                             if 'pdf' in attachmentName:
                                 print('Nom de la pièce jointe : %s\n' % attachmentName)
                                 
-                                test = open('./utils/files/' + attachmentName, 'wb').write(base64.b64decode(fileContent))
+                                open('./utils/files/' + attachmentName, 'wb').write(base64.b64decode(fileContent))
                                 
                                 with open('./utils/files/' + attachmentName, 'rb') as f:
                                     pdfReader = PdfFileReader(f)
@@ -57,12 +64,12 @@ class Producer:
                                     for page in pdfReader.pages:
                                         pageObject += page.extractText()
                                     
-                                    text = ''
+                                    attachment_text = ''
                                     
                                     for line in pageObject.replace('\n', '').split('  '):
-                                        text += line + '\n'
+                                        attachment_text += line + '\n'
                                     
-                                    return text
+                                    self.feedFIFO(mail_id, attachment_text)
 
 if __name__ == "__main__":
     producer = Producer()

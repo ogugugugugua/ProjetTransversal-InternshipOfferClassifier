@@ -11,6 +11,10 @@ class Consumer:
 
     def consume(self):
         print("En attente d'offres...")
-        while True:
-            offer_data = self.q.get()
-            self.feeder.classify(offer_data["id"], offer_data["clean_text"])
+        
+        try:
+            while True:
+                offer_data = self.q.get()
+                self.feeder.classify(offer_data["id"], offer_data["clean_text"])
+        except KeyboardInterrupt: # Ctrl + c
+            pass     

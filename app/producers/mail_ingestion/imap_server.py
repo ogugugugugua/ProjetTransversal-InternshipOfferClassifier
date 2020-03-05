@@ -7,6 +7,7 @@ from imap_db import StoreMails
 from utils import abs_path
 import email
 import hashlib
+import random
 
 class HyperplanImapServer:
 
@@ -59,12 +60,12 @@ class HyperplanImapServer:
             typ, data = imap.fetch(num, '(RFC822)')
             msg = email.message_from_bytes(data[0][1])
             
-            mail_id = int(num.decode('utf8'))
+            #mail_id = int(num.decode('utf8'))
             sender = msg['From']
 
             if (self.isSenderInStopMail(sender)):
                 imap.store(num, '+FLAGS', r'(\deleted)')
-                print('Mail %d deleted' % mail_id)
+                #print('Mail %d deleted' % mail_id)
                 
         imap.expunge()
         
@@ -100,8 +101,9 @@ class HyperplanImapServer:
             sender = msg['From']
             subject = email.header.make_header(email.header.decode_header(msg['Subject']))
             date = email.header.make_header(email.header.decode_header(msg['Date']))
-            hash_object = hashlib.sha1(subject.encode().encode())
-            mail_id = hash_object.hexdigest()
+            #hash_object = hashlib.sha1(subject.encode().encode())
+            #mail_id = hash_object.hexdigest()
+            mail_id = random.randrange(999999999999999999)
 
             # Si l'émetteur n'est pas dans la stopMail, on ajoute le mail dans la mailList
             if (not self.isSenderInStopMail(sender)):               
@@ -114,7 +116,7 @@ class HyperplanImapServer:
         mailList = self.getMails(imap, start)
 
         if (len(mailList) > 0):
-            writer = StoreMails(abs_path('../databases/mail_offers.db'))
+            writer = StoreMails(abs_path('databases/mail_offers.db'))
             
             for i in range(len(mailList)):
                 writer.write_result(mailList[i][0], mailList[i][1], mailList[i][2], mailList[i][3], mailList[i][4], mailList[i][5])
@@ -126,7 +128,7 @@ class HyperplanImapServer:
             return False
         
     def fetchMails(self):
-        reader = StoreMails(abs_path('../databases/mail_offers.db'))
+        reader = StoreMails(abs_path('databases/mail_offers.db'))
         mailsInformations = []
         
         for mail in reader.fetch_mails():
@@ -140,7 +142,7 @@ class HyperplanImapServer:
         return mailsInformations
 
     def clearDB(self):
-        StoreMails(abs_path('../databases/mail_offers.db')).clear_DB()
+        StoreMails(abs_path('databases/mail_offers.db')).clear_DB()
         
     def imapDisconnection(self, imap):
         # Déconnexion du serveur IMAP
