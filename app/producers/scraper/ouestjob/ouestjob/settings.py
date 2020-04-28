@@ -11,6 +11,8 @@
 
 BOT_NAME = 'ouestjob'
 
+FEED_EXPORT_ENCODING = "utf-8"
+
 SPIDER_MODULES = ['ouestjob.spiders']
 NEWSPIDER_MODULE = 'ouestjob.spiders'
 

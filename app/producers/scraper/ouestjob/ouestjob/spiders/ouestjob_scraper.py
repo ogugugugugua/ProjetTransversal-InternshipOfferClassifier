@@ -22,11 +22,17 @@ class OuestjobSpider(scrapy.Spider):
             yield response.follow(next_page, self.parse)
     
     def parse_offer(self, response):
+
+        text_list = response.css('section[data-job-description] *::text').getall()
+        clean_text_list = [x for x in text_list if '\r\n' not in x] 
+        clean_text = ' '.join(clean_text_list)  
         yield{
             'id' : json.loads(response.css('section[data-job-description]::attr(data-job-description)').get())['idoffer'],
             'title': response.css('li.single:first-of-type span+span::text').get(),
-            'company': json.loads(response.css('section[data-job-description]::attr(data-job-description)').get())['company']
-            # 'description': response.css('section[data-job-description]>p').get()
+            'company': json.loads(response.css('section[data-job-description]::attr(data-job-description)').get())['company'],
+            'description': clean_text
         }
+
+
 
 
