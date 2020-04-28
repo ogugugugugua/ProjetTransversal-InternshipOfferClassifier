@@ -25,13 +25,22 @@ $ pip install persist-queue
 Lancement de l'application :
 
 ```console
+$ cd app/
 $ python3 main.py
 ```
 
 Lancement du producteur de test (après utilisation):
 
 ```console
+$ cd app/
 $ python3 producers/producer_test.py
+```
+
+Lancement du scraper:
+
+```console
+$ cd app/producers/scraper/ouestjob/ouestjob/spiders/
+$ scrapy crawl ouestjob
 ```
 
 # Organisation du projet
