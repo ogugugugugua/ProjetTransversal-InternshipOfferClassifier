@@ -16,6 +16,11 @@ FEED_EXPORT_ENCODING = "utf-8"
 SPIDER_MODULES = ['ouestjob.spiders']
 NEWSPIDER_MODULE = 'ouestjob.spiders'
 
+ITEM_PIPELINES = {
+    'ouestjob.pipelines.OuestjobPipeline': 1
+}
+
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ouestjob (+http://www.yourdomain.com)'
