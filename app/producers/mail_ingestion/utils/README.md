@@ -1,5 +1,17 @@
 # Récupération des offres de stage à partir d'un serveur IMAP
 
+## Installations
+
+- pip install python-docx
+- pip install PyPDF2
+- pip install persist-queue
+
+Les 4 prochaines bibliothèques font normalement partie de la bibliothèque standard, mais il faudra peut-être les installer.
+- socket
+- imaplib
+- email
+- base64 
+
 ## Fonctionnement
 
 - On se connecte au serveur imap de MADOC sur le compte de l'utilisateur hyperplan avec `imapConnection(self)`
@@ -47,3 +59,4 @@ Solution : stocker la version encodée et la décoder en base 64 lors de la réc
 - representation@interassonantes.org
 - bougetoncampus.interassonantes@gmail.com
 - voixindependante@gmail.com
+- support-comptes@univ-nantes.fr

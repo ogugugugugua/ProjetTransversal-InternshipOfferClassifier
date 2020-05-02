@@ -6,8 +6,9 @@ from imaplib import IMAP4_SSL as IMAP
 from imap_db import StoreMails
 from utils import abs_path
 import email
-import hashlib
 import random
+
+from email.header import decode_header
 
 class HyperplanImapServer:
 
@@ -16,8 +17,13 @@ class HyperplanImapServer:
         self.imap_host = 'imaps.etu.univ-nantes.fr'
         self.imap_user = 'hyperplan'
         self.imap_pass = 'm5yeAJzn'
+        
         # On récupère les mails à éviter et on enlève les \n avec strip() pour chaque adresse mail
         self.stopMail = [line.strip() for line in open('./utils/stopMail.txt', 'r').readlines()]
+        
+        # Commenter ces 2 lignes lors de la mise en production
+        self.clearDB()
+        self.restartCounter()
 
     def imapConnection(self):
         # Connexion au serveur IMAP
@@ -27,7 +33,7 @@ class HyperplanImapServer:
             imap.login(self.imap_user, self.imap_pass)
             print('Log in !\n')
             imap.select('INBOX')
-            #self.deleteMails(imap)
+            self.deleteMails(imap)
             
             return imap
         except gaierror:
@@ -45,7 +51,8 @@ class HyperplanImapServer:
         return False
 
     def readMails(self, imap):
-        mailList = self.getMails(imap)
+        
+        mailList = self.getMails(imap, True)
 
         for mail in mailList:
             print('------------------------------- Mail -------------------------------')
@@ -54,22 +61,28 @@ class HyperplanImapServer:
         print('------------------------------- END Reading mails-------------------------------')
 
     def deleteMails(self, imap):
+        
         typ, data = imap.search(None, 'UNSEEN')
         
         for num in data[0].split():
             typ, data = imap.fetch(num, '(RFC822)')
             msg = email.message_from_bytes(data[0][1])
             
-            #mail_id = int(num.decode('utf8'))
             sender = msg['From']
 
             if (self.isSenderInStopMail(sender)):
                 imap.store(num, '+FLAGS', r'(\deleted)')
-                #print('Mail %d deleted' % mail_id)
                 
         imap.expunge()
+    
+    def restartCounter(self):
         
+        with open('./utils/counter.txt', 'r+') as f:
+                f.seek(0)
+                f.write(str(0))
+                
     def getMails(self, imap, start = False):
+        
         mailList = []
 
         if start:
@@ -90,9 +103,25 @@ class HyperplanImapServer:
 
                 for part in msg.walk():
                     ctype = part.get_content_type()
-                    
-                    if ctype in ['application/pdf', 'application/json', 'application/octet-stream']:
-                        attachment += part.get_filename() + ',' + part.get_payload(decode = False) + ','
+
+                    if ctype in ['application/pdf', 'application/octet-stream']:
+                        part_filename = part.get_filename()                       
+                        encoding = False
+                        
+                        for i in range(len(decode_header(part_filename))):
+                            if decode_header(part_filename)[i][1] is not None:
+                                encoding = decode_header(part_filename)[i][1]
+                                break
+                        
+                        if encoding:
+                            filename = ''
+                            
+                            for string in decode_header(part_filename):
+                                filename += string[0].decode(encoding)
+                        else:
+                            filename = part_filename
+                            
+                        attachment += filename + ',' + part.get_payload(decode = False) + ','
 
                     if (ctype == 'text/plain' and first):
                         body = part
@@ -101,9 +130,11 @@ class HyperplanImapServer:
             sender = msg['From']
             subject = email.header.make_header(email.header.decode_header(msg['Subject']))
             date = email.header.make_header(email.header.decode_header(msg['Date']))
-            #hash_object = hashlib.sha1(subject.encode().encode())
-            #mail_id = hash_object.hexdigest()
-            mail_id = random.randrange(999999999999999999)
+            
+            with open('./utils/counter.txt', 'r+') as f:
+                mail_id = int(f.read())
+                f.seek(0)
+                f.write(str(mail_id + 1))
 
             # Si l'émetteur n'est pas dans la stopMail, on ajoute le mail dans la mailList
             if (not self.isSenderInStopMail(sender)):               
@@ -113,6 +144,7 @@ class HyperplanImapServer:
         return mailList
 
     def storeMails(self, imap, start = False):
+        
         mailList = self.getMails(imap, start)
 
         if (len(mailList) > 0):
@@ -121,13 +153,14 @@ class HyperplanImapServer:
             for i in range(len(mailList)):
                 writer.write_result(mailList[i][0], mailList[i][1], mailList[i][2], mailList[i][3], mailList[i][4], mailList[i][5])
                 
-            print('DB update\n')
+            print('DB updated\n')
             return True
         
         elif (len(mailList) == 0):
             return False
         
     def fetchMails(self):
+        
         reader = StoreMails(abs_path('databases/mail_offers.db'))
         mailsInformations = []
         
@@ -142,6 +175,7 @@ class HyperplanImapServer:
         return mailsInformations
 
     def clearDB(self):
+        
         StoreMails(abs_path('databases/mail_offers.db')).clear_DB()
         
     def imapDisconnection(self, imap):
