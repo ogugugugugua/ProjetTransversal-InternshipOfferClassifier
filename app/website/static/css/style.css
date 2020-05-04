@@ -44,7 +44,7 @@ body {
     min-height: 100vh;
     background-color: var(--bg);
     color: var(--text);
-    font-family: Tahoma, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     transition: background 200ms ease-in-out, color 200ms ease-in-out;
     display: flex;
     flex-direction: column;
@@ -130,7 +130,7 @@ header h1 {
 }
 
 .light .moon:hover {
-    fill: var(--grey3);
+    fill: var(--blue);
 }
 
 .dark .sun:hover {
@@ -173,13 +173,16 @@ div.crud {
     margin-bottom: 40px;
     display: flex;
     justify-content: space-evenly;
-    align-items: center;
+    align-items: baseline;
 }
 
 .crud-table {
     border: medium solid var(--border-table);
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 50%;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #0005;
 }
 
 th {
@@ -206,7 +209,7 @@ td {
     overflow: hidden;
     margin-top: 10px;
     border-radius: 5px;
-    box-shadow: 1px 1px 2px #0008;
+    box-shadow: 1px 1px 2px #0005;
 }
 
 .select-container select {
@@ -262,8 +265,8 @@ td.link a {
     --grey4: #454e56;
     --grey5: #2a2e35;
     --grey6: #12181b;
-    --blue: #006494;
-    --orange: #ffa514;
+    --blue: #247ba0;
+    --orange: #fcbf49;
 }
 
 .dark {

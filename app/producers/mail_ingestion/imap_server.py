@@ -80,6 +80,7 @@ class HyperplanImapServer:
         with open('./utils/counter.txt', 'r+') as f:
                 f.seek(0)
                 f.write(str(1))
+                f.truncate()
                 
     def getMails(self, imap, start = False):
         

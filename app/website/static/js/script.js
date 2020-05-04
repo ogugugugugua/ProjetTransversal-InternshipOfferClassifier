@@ -3,6 +3,11 @@ const lightButton = document.getElementById('light');
 const select = document.getElementById('category-select');
 const offerTable = document.querySelectorAll('.crud-table tbody tr');
 const body = document.body;
+const theme = localStorage.getItem('theme');
+
+if (theme) {
+    body.classList.add(theme);
+}
 
 darkButton.onclick = () => {
     body.classList.replace('light', 'dark');

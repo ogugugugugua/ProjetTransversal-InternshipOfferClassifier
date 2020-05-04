@@ -30,13 +30,7 @@
     <span class="shadow">
         <header>
             <h1>PolyOffres</h1>
-            <p>Le site dédié aux étudiants de Polytech qui réuni les offres de stages disponibles</p>
-            <p>Pour choisir les offres, voici les étapes à suivre</p>
-            <ul>
-                <li>Etape 1</li>
-                <li>Etape 2</li>
-                <li>Etape 3</li>
-            </ul>
+            <p>Offres de stage en Informatique pour les élèves de Polytech</p>
         </header>
     </span>
 
@@ -48,9 +42,11 @@
             <div class="select-container">
                 <select name="category" id="category-select">
                     <option value="all">Toutes les catégories</option>
+                    {% if categories %}
                     {% for row in categories %}
                     <option value="{{ row[0] }}">{{ row[0] }}</option>
                     {% endfor %}
+                    {% endif %}
                 </select>
             </div>
         </div>
@@ -63,7 +59,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for row in offers %}
+                {% if categories %} {% for row in offers %}
                 <tr>
                     <td>{{ row[1] }}</td>
                     <td class="link">
@@ -71,7 +67,7 @@
                         <a href="/static/offers/{{ key }}/{{ value }}" target="_blank">{{ value }}</a> {% endif %} {% endfor %}
                     </td>
                 </tr>
-                {% endfor %}
+                {% endfor %} {% endif %}
             </tbody>
         </table>
     </div>

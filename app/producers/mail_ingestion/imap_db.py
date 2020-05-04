@@ -12,7 +12,7 @@ class StoreMails(SQLiteConnector):
         
         if self.sqliteConnection and self.cursor:
             try:
-                query = '''CREATE TABLE IF NOT EXISTS mail_offer (
+                query = '''CREATE TABLE IF NOT EXISTS mail_offers (
                             id	INTEGER PRIMARY KEY,
                             sender	TEXT,
                             subject	TEXT,
@@ -29,7 +29,7 @@ class StoreMails(SQLiteConnector):
         
         if self.sqliteConnection and self.cursor:
             try:
-                query = "INSERT OR REPLACE INTO mail_offer (id, sender, subject, date, body, attachment) VALUES ('%d', '%s', '%s', '%s', '%s', '%s')" % (mail_id, sender, subject, date, body, attachment)
+                query = "INSERT OR REPLACE INTO mail_offers (id, sender, subject, date, body, attachment) VALUES ('%d', '%s', '%s', '%s', '%s', '%s')" % (mail_id, sender, subject, date, body, attachment)
                 self.cursor.execute(query)
                 self.sqliteConnection.commit()
                 print("Saved email %s." % mail_id)
@@ -40,7 +40,7 @@ class StoreMails(SQLiteConnector):
         
         if self.sqliteConnection and self.cursor:
             try:
-                query = "SELECT id, sender, subject, date, body, attachment FROM mail_offer"
+                query = "SELECT id, sender, subject, date, body, attachment FROM mail_offers"
                 self.cursor.execute(query)
                 self.sqliteConnection.commit()
                 print("Fetched emails.\n")
@@ -53,7 +53,7 @@ class StoreMails(SQLiteConnector):
         
         if self.sqliteConnection and self.cursor:
             try:
-                query = "DELETE FROM mail_offer"
+                query = "DELETE FROM mail_offers"
                 self.cursor.execute(query)
                 self.sqliteConnection.commit()
                 print("Cleared Database.\n")
