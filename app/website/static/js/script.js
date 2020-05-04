@@ -7,14 +7,22 @@ const theme = localStorage.getItem('theme');
 
 if (theme) {
     body.classList.add(theme);
+
+    if (theme === 'dark') {
+        body.classList.replace('light', 'dark');
+    } else if (theme === 'light') {
+        body.classList.replace('dark', 'light');
+    }
 }
 
 darkButton.onclick = () => {
     body.classList.replace('light', 'dark');
+    localStorage.setItem('theme', 'dark');
 }
 
 lightButton.onclick = () => {
     body.classList.replace('dark', 'light');
+    localStorage.setItem('theme', 'light');
 }
 
 const tableChange = () => {
