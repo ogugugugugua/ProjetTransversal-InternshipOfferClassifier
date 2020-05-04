@@ -16,9 +16,10 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     div.crud {
         flex-direction: column;
+        align-items: center;
     }
     .crud-table {
         margin-top: 40px;
@@ -35,6 +36,17 @@
     }
     p.copyright {
         font-size: 13px;
+    }
+}
+
+@media (min-width: 992px) {
+    div.crud {
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: baseline;
+    }
+    .crud-table {
+        margin-top: 40px;
     }
 }
 
@@ -130,7 +142,7 @@ header h1 {
 }
 
 .light .moon:hover {
-    fill: var(--blue);
+    fill: var(--red);
 }
 
 .dark .sun:hover {
@@ -169,11 +181,9 @@ footer {
 /* Choix de l'offre */
 
 div.crud {
-    margin-top: 50px;
+    margin-top: 20px;
     margin-bottom: 40px;
     display: flex;
-    justify-content: space-evenly;
-    align-items: baseline;
 }
 
 .crud-table {
@@ -251,7 +261,7 @@ td.link a {
 }
 
 .light td.link a:hover {
-    color: var(--blue);
+    color: var(--red);
 }
 
 
@@ -265,7 +275,7 @@ td.link a {
     --grey4: #454e56;
     --grey5: #2a2e35;
     --grey6: #12181b;
-    --blue: #247ba0;
+    --red: #872336;
     --orange: #fcbf49;
 }
 
@@ -296,5 +306,5 @@ td.link a {
     --bg-th: var(--grey2);
     --bg-td: var(--grey1);
     --border-table: var(--grey2);
-    --title: var(--blue);
+    --title: var(--red);
 }
