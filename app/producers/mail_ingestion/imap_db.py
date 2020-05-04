@@ -29,7 +29,7 @@ class StoreMails(SQLiteConnector):
         
         if self.sqliteConnection and self.cursor:
             try:
-                query = "INSERT OR REPLACE INTO mail_offer(id, sender, subject, date, body, attachment) VALUES ('%d', '%s', '%s', '%s', '%s', '%s')" % (mail_id, sender, subject, date, body, attachment)
+                query = "INSERT OR REPLACE INTO mail_offer (id, sender, subject, date, body, attachment) VALUES ('%d', '%s', '%s', '%s', '%s', '%s')" % (mail_id, sender, subject, date, body, attachment)
                 self.cursor.execute(query)
                 self.sqliteConnection.commit()
                 print("Saved email %s." % mail_id)
