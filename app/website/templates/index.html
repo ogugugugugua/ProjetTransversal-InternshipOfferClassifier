@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolyOffres</title>
+
+    <link rel="icon" type="image/png" href="../static/img/jobs-icon.png">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <script src="../static/js/script.js" defer></script>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a id="dark" href="#" title="Thème sombre"><svg class="theme moon" viewBox="-12 0 448 448.04455"><path d="m224.023438 448.03125c85.714843.902344 164.011718-48.488281 200.117187-126.230469-22.722656 9.914063-47.332031 14.769531-72.117187 14.230469-97.15625-.109375-175.890626-78.84375-176-176 .972656-65.71875 37.234374-125.832031 94.910156-157.351562-15.554688-1.980469-31.230469-2.867188-46.910156-2.648438-123.714844 0-224.0000005 100.289062-224.0000005 224 0 123.714844 100.2851565 224 224.0000005 224zm0 0"/></svg></a>
+            </li>
+            <li class="nav-item">
+                <a id="light" href="#" title="Thème clair"><svg class="theme sun" viewBox="0 0 302.4 302.4"><g><g><g><path d="M204.8,97.6C191.2,84,172,75.2,151.2,75.2s-40,8.4-53.6,22.4c-13.6,13.6-22.4,32.8-22.4,53.6s8.8,40,22.4,53.6c13.6,13.6,32.8,22.4,53.6,22.4s40-8.4,53.6-22.4c13.6-13.6,22.4-32.8,22.4-53.6S218.8,111.2,204.8,97.6z"/><path d="M151.2,51.6c5.6,0,10.4-4.8,10.4-10.4V10.4c0-5.6-4.8-10.4-10.4-10.4c-5.6,0-10.4,4.8-10.4,10.4v30.8C140.8,46.8,145.6,51.6,151.2,51.6z"/><path d="M236.4,80.8l22-22c4-4,4-10.4,0-14.4s-10.4-4-14.4,0l-22,22c-4,4-4,10.4,0,14.4C225.6,84.8,232,84.8,236.4,80.8z"/><path d="M292,140.8h-30.8c-5.6,0-10.4,4.8-10.4,10.4c0,5.6,4.8,10.4,10.4,10.4H292c5.6,0,10.4-4.8,10.4-10.4C302.4,145.6,297.6,140.8,292,140.8z"/><path d="M236,221.6c-4-4-10.4-4-14.4,0s-4,10.4,0,14.4l22,22c4,4,10.4,4,14.4,0s4-10.4,0-14.4L236,221.6z"/><path d="M151.2,250.8c-5.6,0-10.4,4.8-10.4,10.4V292c0,5.6,4.8,10.4,10.4,10.4c5.6,0,10.4-4.8,10.4-10.4v-30.8C161.6,255.6,156.8,250.8,151.2,250.8z"/><path d="M66,221.6l-22,22c-4,4-4,10.4,0,14.4s10.4,4,14.4,0l22-22c4-4,4-10.4,0-14.4C76.8,217.6,70.4,217.6,66,221.6z"/><path d="M51.6,151.2c0-5.6-4.8-10.4-10.4-10.4H10.4c-5.6,0-10.4,4.8-10.4,10.4s4.8,10.4,10.4,10.4h30.8C46.8,161.6,51.6,156.8,51.6,151.2z"/><path d="M66,80.8c4,4,10.4,4,14.4,0s4-10.4,0-14.4l-22-22c-4-4-10.4-4-14.4,0s-4,10.4,0,14.4L66,80.8z"/></g></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg></a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="border"></div>
+
+    <span class="shadow">
+        <header>
+            <h1>PolyOffres</h1>
+            <p>Offres de stage en Informatique pour les élèves de Polytech</p>
+        </header>
+    </span>
+
+    <div class="crud">
+
+        <div class="select">
+            <label for="category-select">Sélectionnez une catégorie :</label>
+
+            <div class="select-container">
+                <select name="category" id="category-select">
+                    <option value="all">Toutes les catégories</option>
+                    {% if categories %}
+                    {% for row in categories %}
+                    <option value="{{ row[0] }}">{{ row[0] }}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+        </div>
+
+        <table class="crud-table">
+            <thead>
+                <tr>
+                    <th>Catégorie</th>
+                    <th>Téléchargement</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if categories %} {% for row in offers %}
+                <tr>
+                    <td>{{ row[1] }}</td>
+                    <td class="link">
+                        {% for key, value in fileDict.items() %} {% if key == row[0] %}
+                        <a href="/static/offers/{{ key }}/{{ value }}" target="_blank">{{ value }}</a> {% endif %} {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %} {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p class="copyright">© 2020 Polytech Nantes, Tous droits réservés.</p>
+    </footer>
+
+</body>
+
+</html>

@@ -40,11 +40,14 @@ class Producer:
         
         self.q.put({"id": id, "clean_text": text})
     
-    def pdfToText(self, attachmentName, fileContent):
+    def pdfToText(self, attachmentName, fileContent, id_offer):
         
-        open('./utils/files/' + attachmentName, 'wb').write(base64.b64decode(fileContent))
+        if not os.path.isdir('../../website/static/offers/' + id_offer):
+            os.makedirs('../../website/static/offers/' + id_offer)
+        
+        open('../../website/static/offers/' + id_offer + '/' + attachmentName, 'wb').write(base64.b64decode(fileContent))
                                 
-        with open('./utils/files/' + attachmentName, 'rb') as f:
+        with open('../../website/static/offers/' + id_offer + '/' + attachmentName, 'rb') as f:
             pdfReader = PdfFileReader(f)
             pageObject = ''
             
@@ -55,16 +58,17 @@ class Producer:
             
             for line in pageObject.replace('\n', '').split('  '):
                 attachment_text += line + '\n'
-            
-        os.remove('./utils/files/' + attachmentName)
         
         return attachment_text
 
-    def docxToText(self, attachmentName, fileContent):
+    def docxToText(self, attachmentName, fileContent, id_offer):
         
-        open('./utils/files/' + attachmentName, 'wb').write(base64.b64decode(fileContent))
+        if not os.path.isdir('../../website/static/offers/' + id_offer):
+            os.makedirs('../../website/static/offers/' + id_offer)
+            
+        open('../../website/static/offers/' + id_offer + '/' + attachmentName, 'wb').write(base64.b64decode(fileContent))
 
-        doc = docx.Document('./utils/files/' + attachmentName)
+        doc = docx.Document('../../website/static/offers/' + id_offer + '/' + attachmentName)
         attachment_text = ''
 
         for para in doc.paragraphs:
@@ -75,14 +79,15 @@ class Producer:
                 for cell in row.cells:
                     for para in cell.paragraphs:
                         attachment_text += ' ' + para.text
-            
-        os.remove('./utils/files/' + attachmentName)
         
         return attachment_text
                                 
     def attachmentToText(self, informations):
         
         for mail in informations:
+            
+            attachementCounter = 1
+            
             if (mail[0] not in self.list_classified_mails):
                 for info in mail:
                     if (mail.index(info) == 0):
@@ -99,16 +104,19 @@ class Producer:
                             if attachmentName:
                                 fileContent = attachments[i + 1]
                                 attachment_text = ''
+                                id_offer = str(mail_id) + str(attachementCounter)
                                 
                                 print('Nom de la pièce jointe : %s\n' % attachmentName)
                                 
                                 if attachmentName.endswith('.pdf'):                                
-                                    attachment_text = self.pdfToText(attachmentName, fileContent)
+                                    attachment_text = self.pdfToText(attachmentName, fileContent, id_offer)
                                     
                                 elif attachmentName.endswith('.docx'):
-                                    attachment_text = self.docxToText(attachmentName, fileContent)
+                                    attachment_text = self.docxToText(attachmentName, fileContent, id_offer)
                                     
-                                self.feedFIFO(mail_id, attachment_text)
+                                self.feedFIFO(int(id_offer), attachment_text)
+                                
+                                attachementCounter += 1
 
 if __name__ == "__main__":
     producer = Producer()
