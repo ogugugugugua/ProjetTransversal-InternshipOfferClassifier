@@ -21,8 +21,8 @@
         flex-direction: column;
         align-items: center;
     }
-    .crud-table {
-        margin-top: 40px;
+    .scroll {
+        width: 95%;
     }
 }
 
@@ -45,8 +45,8 @@
         justify-content: space-evenly;
         align-items: baseline;
     }
-    .crud-table {
-        margin-top: 40px;
+    .scroll {
+        width: 70%;
     }
 }
 
@@ -187,27 +187,53 @@ div.crud {
 }
 
 .crud-table {
-    border: medium solid var(--border-table);
     border-collapse: separate;
     border-spacing: 0;
-    width: 50%;
+    width: 100%;
     border-radius: 5px;
-    box-shadow: 1px 1px 2px #0005;
 }
 
-th {
-    border: thin solid var(--border-table);
+.crud-table th {
     width: 50%;
     padding: 5px;
     background-color: var(--bg-th);
 }
 
-td {
+.crud-table td {
     border: thin solid var(--border-table);
     width: 50%;
     padding: 10px;
     text-align: center;
     background-color: var(--bg-td);
+}
+
+.scroll {
+    border: medium solid var(--border-table);
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #0005;
+    overflow-y: auto;
+    max-height: 50vh;
+    scrollbar-color: var(--scrollbar-scroll) var(--scrollbar);
+    scrollbar-width: thin;
+    margin-top: 40px;
+}
+
+.scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background: var(--scrollbar);
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-scroll);
+    border: 1px solid var(--scrollbar);
+}
+
+.scroll th {
+    top: 0;
+    position: sticky;
 }
 
 .select {
@@ -292,6 +318,8 @@ td.link a {
     --bg-td: var(--grey4);
     --border-table: var(--grey5);
     --title: var(--orange);
+    --scrollbar: var(--grey5);
+    --scrollbar-scroll: var(--orange);
 }
 
 .light {
@@ -307,4 +335,6 @@ td.link a {
     --bg-td: var(--grey1);
     --border-table: var(--grey2);
     --title: var(--red);
+    --scrollbar: var(--grey2);
+    --scrollbar-scroll: var(--red);
 }
