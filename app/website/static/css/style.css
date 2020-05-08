@@ -130,7 +130,7 @@ header h1 {
 .theme {
     height: 20px;
     fill: var(--theme);
-    transition: fill 200ms ease-in-out;
+    transition: fill 150ms ease-in-out;
 }
 
 .dark .moon {
@@ -194,15 +194,13 @@ div.crud {
 }
 
 .crud-table th {
-    width: 50%;
     padding: 5px;
     background-color: var(--bg-th);
 }
 
 .crud-table td {
     border: thin solid var(--border-table);
-    width: 50%;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
     background-color: var(--bg-td);
 }
