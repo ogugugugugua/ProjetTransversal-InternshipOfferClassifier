@@ -130,7 +130,7 @@ header h1 {
 .theme {
     height: 20px;
     fill: var(--theme);
-    transition: fill 200ms ease-in-out;
+    transition: fill 150ms ease-in-out;
 }
 
 .dark .moon {
@@ -157,6 +157,27 @@ header h1 {
 .light .nav-item:nth-of-type(1) a,
 .dark .nav-item:nth-of-type(2) a {
     cursor: pointer;
+}
+
+.auth {
+    position: absolute;
+    right: 5%;
+    top: 12.5px;
+}
+
+.auth svg {
+    height: 25px;
+    fill: var(--theme);
+    cursor: pointer;
+    transition: fill 150ms ease-in-out;
+}
+
+.dark .auth svg:hover {
+    fill: var(--orange);
+}
+
+.light .auth svg:hover {
+    fill: var(--red);
 }
 
 
@@ -194,15 +215,13 @@ div.crud {
 }
 
 .crud-table th {
-    width: 50%;
     padding: 5px;
     background-color: var(--bg-th);
 }
 
 .crud-table td {
     border: thin solid var(--border-table);
-    width: 50%;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
     background-color: var(--bg-td);
 }
@@ -323,13 +342,13 @@ td.link a {
 }
 
 .light {
-    --bg: var(--grey1);
-    --bg-header: var(--grey2);
+    --bg: var(--grey0);
+    --bg-header: var(--grey1);
     --text: var(--grey6);
     --theme: var(--grey6);
     --border: var(--grey1);
     --border-shadow: var(--grey3);
-    --bg-select: var(--grey2);
+    --bg-select: var(--grey1);
     --color-select: var(--grey6);
     --bg-th: var(--grey2);
     --bg-td: var(--grey1);
