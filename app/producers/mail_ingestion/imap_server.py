@@ -16,7 +16,7 @@ class HyperplanImapServer:
         # Configuration IMAP
         self.imap_host = 'imaps.etu.univ-nantes.fr'
         self.imap_user = 'hyperplan'
-        self.imap_pass = 'm5yeAJzn'
+        self.imap_pass = 'm6yeAJzn'
         
         # On récupère les mails à éviter et on enlève les \n avec strip() pour chaque adresse mail
         self.stopMail = [line.strip() for line in open('./utils/stopMail.txt', 'r').readlines()]

@@ -51,25 +51,28 @@
             </div>
         </div>
 
-        <table class="crud-table">
-            <thead>
-                <tr>
-                    <th>Catégorie</th>
-                    <th>Téléchargement</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if categories %} {% for row in offers %}
-                <tr>
-                    <td>{{ row[1] }}</td>
-                    <td class="link">
-                        {% for key, value in fileDict.items() %} {% if key == row[0] %}
-                        <a href="/static/offers/{{ key }}/{{ value }}" target="_blank">{{ value }}</a> {% endif %} {% endfor %}
-                    </td>
-                </tr>
-                {% endfor %} {% endif %}
-            </tbody>
-        </table>
+        <div class="scroll">
+            <table class="crud-table">
+                <thead>
+                    <tr>
+                        <th>Catégorie</th>
+                        <th>Téléchargement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if categories %} {% for row in offers %} {% for key, value in fileDict.items() %} {% if key == row[0] %}
+                    <tr>
+                        <td>{{ row[1] }}</td>
+                        <td class="link">
+
+                            <a href="/static/offers/{{ key }}/{{ value }}" target="_blank">{{ value }}</a>
+                        </td>
+                    </tr>
+                    {% endif %} {% endfor %} {% endfor %} {% endif %}
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
     <footer>
