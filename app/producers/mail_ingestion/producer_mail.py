@@ -30,7 +30,6 @@ class Producer:
                     self.attachmentToText(informations)
                     print('Searching mails...\n')
                     
-                time.sleep(5)
         except KeyboardInterrupt: # Ctrl + c
             pass            
             
