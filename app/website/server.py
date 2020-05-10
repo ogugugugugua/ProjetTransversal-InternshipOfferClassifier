@@ -2,7 +2,6 @@ from flask import Flask, render_template
 from db_connector import DBConnector
 from utils import abs_path
 import os
-import json
 
 app = Flask(__name__)
 
