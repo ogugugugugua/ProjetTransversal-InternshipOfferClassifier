@@ -18,7 +18,7 @@ class Producer:
         
         hyperplan = HyperplanImapServer()
         imap = hyperplan.imapConnection()
-        hyperplan.storeMails(imap, True)
+        hyperplan.storeMails(imap, False)
         informations = hyperplan.fetchMails()
         self.attachmentToText(informations)
         print('Searching mails...\n')
