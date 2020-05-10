@@ -18,7 +18,7 @@ class Producer:
         
         hyperplan = HyperplanImapServer()
         imap = hyperplan.imapConnection()
-        hyperplan.storeMails(imap, True)
+        hyperplan.storeMails(imap, False)
         informations = hyperplan.fetchMails()
         self.attachmentToText(informations)
         print('Searching mails...\n')
@@ -30,7 +30,6 @@ class Producer:
                     self.attachmentToText(informations)
                     print('Searching mails...\n')
                     
-                time.sleep(5)
         except KeyboardInterrupt: # Ctrl + c
             pass            
             
@@ -108,6 +107,9 @@ class Producer:
                                 
                                 print('Nom de la pièce jointe : %s\n' % attachmentName)
                                 
+                                if not os.path.isdir('../../website/static/offers/'):
+                                    os.makedirs('../../website/static/offers/')
+                                    
                                 if attachmentName.endswith('.pdf'):                                
                                     attachment_text = self.pdfToText(attachmentName, fileContent, id_offer)
                                     

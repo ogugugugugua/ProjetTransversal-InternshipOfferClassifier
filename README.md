@@ -47,6 +47,20 @@ $ cd app/producers/scraper/ouestjob/ouestjob/spiders/
 $ scrapy crawl ouestjob
 ```
 
+Lancement du producteur d'ingestion de courriels :
+
+```console
+$ cd app/producers/mail_ingestion/
+$ python producer_mail.py
+```
+
+Lancement du site web :
+
+```console
+$ cd app/website/
+$ python server.py
+```
+
 # Organisation du projet
 
 ## Backend

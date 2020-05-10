@@ -22,8 +22,8 @@ class HyperplanImapServer:
         self.stopMail = [line.strip() for line in open('./utils/stopMail.txt', 'r').readlines()]
         
         # Commenter ces 2 lignes lors de la mise en production
-        self.clearDB()
-        self.restartCounter()
+        # self.clearDB()
+        # self.restartCounter()
 
     def imapConnection(self):
         # Connexion au serveur IMAP
