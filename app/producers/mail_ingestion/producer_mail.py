@@ -108,6 +108,9 @@ class Producer:
                                 
                                 print('Nom de la pièce jointe : %s\n' % attachmentName)
                                 
+                                if not os.path.isdir('../../website/static/offers/'):
+                                    os.makedirs('../../website/static/offers/')
+                                    
                                 if attachmentName.endswith('.pdf'):                                
                                     attachment_text = self.pdfToText(attachmentName, fileContent, id_offer)
                                     
