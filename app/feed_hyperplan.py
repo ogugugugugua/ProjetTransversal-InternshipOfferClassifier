@@ -15,14 +15,14 @@ class FeedHyperplan:
             "offer_classifier",
             # Ajout du modèle MultinomialNB au projet
             prediction_functions=[
-                simple_heuristic
+                mnb_clf
             ]
         )
 
         # Writer qui permet de stocker les résultats de la prédiction
         self.writer = StoreResult(abs_path("databases/offer_classification.db"))
         # Enregistrement de la procédure de stockage en tant que hook de post processing Hyperplan (voir la doc officielle)
-        self.project.register_post_hook(self.writer)
+        #self.project.register_post_hook(self.writer)
 
         
 
