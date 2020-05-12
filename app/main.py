@@ -9,7 +9,7 @@ sys.path.insert(0, abs_path("algorithms/multinomial_nb_sklearn"))
 # print(sys.path)
 
 feeder = FeedHyperplan()
-# feeder.classify(0, "machine")
+feeder.benchmark(1000)
 
-consumer = Consumer(feeder)
-consumer.consume()
+# consumer = Consumer(feeder)
+# consumer.consume()

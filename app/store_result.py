@@ -25,7 +25,7 @@ class StoreResult(SQLiteConnector):
                 query = "INSERT OR REPLACE INTO offer_classification(id, date, labels, category) VALUES (%d, '%s', '%s' ,'%s')" % (offer_id, date, labels, category)
                 self.cursor.execute(query)
                 self.sqliteConnection.commit()
-                print("Offre classifie sauvegarde.")
+                #print("Offre classifie sauvegarde.")
             except Exception as error:
                 print(error)
 
