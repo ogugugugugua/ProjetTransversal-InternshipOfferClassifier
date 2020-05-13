@@ -3,6 +3,7 @@ import os
 import json
 
 class StoreResult(SQLiteConnector):
+    """Hook de post processing Hyperplan, stockage des résultats dans la base de données SQlite."""
     def __init__(self, db_path):
         super(StoreResult, self).__init__(db_path)
         if self.sqliteConnection and self.cursor:
@@ -30,6 +31,7 @@ class StoreResult(SQLiteConnector):
 
         
     def __call__(self, text: list, labels: dict, metadata: dict):
+        # Trouve la catégorie avec la plus haute probabilité.
         category = labels['label'][max(labels['probability'], key=labels['probability'].get)]
         labels_json = json.dumps(labels)
         self.write_result(metadata["id"], metadata['date'], labels_json, category)

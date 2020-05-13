@@ -10,7 +10,13 @@ class Consumer:
 
 
     def consume(self):
+        """Ingestion des offres arrivant dans la queue"""
         print("En attente d'offres...")
-        while True:
-            offer_data = self.q.get()
-            self.feeder.classify(offer_data["id"], offer_data["clean_text"])
+        
+        try:
+            while True:
+                offer_data = self.q.get()
+                # Quand un offre arrive, on la transfère vers le projet Hyperplan via le feeder.
+                self.feeder.classify(offer_data["id"], offer_data["clean_text"])
+        except KeyboardInterrupt: # Ctrl + c
+            pass     

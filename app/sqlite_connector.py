@@ -2,6 +2,7 @@ import sqlite3
 
 
 class SQLiteConnector:
+    """Mécanismes de base de stockage dans une DB SQLite"""
     def __init__(self, db_path):
         self.cursor = None
         self.sqliteConnection = None

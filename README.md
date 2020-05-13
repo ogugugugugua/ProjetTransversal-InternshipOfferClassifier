@@ -15,9 +15,13 @@
 ## Prérequis
 
 L'application utilise le module `persistqueue` (https://github.com/peter-wangxu/persist-queue) pour la gestion d'une FIFO persistente.
++ `flask` permet l'ouverture du serveur web pour la visualisation des résultats
++ `pickle` permet la récupération du modèle sklearn exporté
++ `PyPDF2` et `python-docx` servent à l'extraction de texte depuis les documents reçus par mail.
++ `scrapy` permet le scraping des offres du site *ouestjob*.
 
 ```console
-$ pip install persist-queue
+$ pip install persist-queue PyPDF2 flask pickle python-docx scrapy
 ```
 
 ## Utilisation
@@ -25,13 +29,36 @@ $ pip install persist-queue
 Lancement de l'application :
 
 ```console
+$ cd app/
 $ python3 main.py
 ```
 
 Lancement du producteur de test (après utilisation):
 
 ```console
+$ cd app/
 $ python3 producers/producer_test.py
+```
+
+Lancement du scraper:
+
+```console
+$ cd app/producers/scraper/ouestjob/ouestjob/spiders/
+$ scrapy crawl ouestjob
+```
+
+Lancement du producteur d'ingestion de courriels :
+
+```console
+$ cd app/producers/mail_ingestion/
+$ python producer_mail.py
+```
+
+Lancement du site web :
+
+```console
+$ cd app/website/
+$ python server.py
 ```
 
 # Organisation du projet
