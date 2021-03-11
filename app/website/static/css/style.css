@@ -159,6 +159,27 @@ header h1 {
     cursor: pointer;
 }
 
+.auth {
+    position: absolute;
+    right: 5%;
+    top: 12.5px;
+}
+
+.auth svg {
+    height: 25px;
+    fill: var(--theme);
+    cursor: pointer;
+    transition: fill 150ms ease-in-out;
+}
+
+.dark .auth svg:hover {
+    fill: var(--orange);
+}
+
+.light .auth svg:hover {
+    fill: var(--red);
+}
+
 
 /* FOOTER */
 
@@ -321,13 +342,13 @@ td.link a {
 }
 
 .light {
-    --bg: var(--grey1);
-    --bg-header: var(--grey2);
+    --bg: var(--grey0);
+    --bg-header: var(--grey1);
     --text: var(--grey6);
     --theme: var(--grey6);
     --border: var(--grey1);
     --border-shadow: var(--grey3);
-    --bg-select: var(--grey2);
+    --bg-select: var(--grey1);
     --color-select: var(--grey6);
     --bg-th: var(--grey2);
     --bg-td: var(--grey1);
